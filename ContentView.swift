@@ -8,14 +8,18 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @ObservedObject var viewModel: ContentViewModel = ContentViewModel()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
-        }
-        .padding()
+        Button("Search Weather for City", action: {
+            viewModel.searchWeather()
+        })
+        TextField(
+                "Enter City Here",
+                text: $viewModel.city
+            )
+        .textFieldStyle(.roundedBorder)
     }
 }
 
