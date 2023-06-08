@@ -41,6 +41,12 @@ struct ContentView: View {
         }
         .onAppear {
             print("Requesting location if not done already")
+            if let city = UserDefaults.standard.string(forKey: "City") {
+                viewModel.city = city
+                Task {
+                    await viewModel.searchWeather()
+                }
+            }
             viewModel.requestLocation()
         }
     }

@@ -56,6 +56,7 @@ class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
                 self.weatherData = nil
             } else {
                 self.weatherData = try JSONDecoder().decode(WeatherObject.self, from: data)
+                UserDefaults.standard.set(self.city, forKey: "City")
             }
         } catch {
             print("ERROR")
