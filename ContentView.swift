@@ -28,6 +28,7 @@ struct ContentView: View {
             NavigationView {
                 VStack {
                     if let weatherData = viewModel.weatherData {
+                        Text("Weather for \(viewModel.city)")
                         AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(weatherData.weather[0].icon)@2x.png")!)
                         Text("Weather: \(weatherData.weather[0].main)")
                         Text("Weather Description: \(weatherData.weather[0].description)")
@@ -40,13 +41,22 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            print("Requesting location if not done already")
+            print("Checking if we have the last loaded city in cache")
+            // I did not have enough time to get the city from the long/latitude coordinates. Long term I would plan to use reverseGeocodeLocation https://developer.apple.com/documentation/corelocation/clgeocoder/1423621-reversegeocodelocation
+//            if (viewModel.location != nil) {
+//                viewModel.city = "Boston"
+//                Task {
+//                    await viewModel.searchWeather()
+//                }
+
             if let city = UserDefaults.standard.string(forKey: "City") {
                 viewModel.city = city
                 Task {
                     await viewModel.searchWeather()
                 }
             }
+
+            print("Requesting location if not done already")
             viewModel.requestLocation()
         }
     }

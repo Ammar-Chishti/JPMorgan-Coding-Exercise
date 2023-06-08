@@ -64,29 +64,6 @@ class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
             self.weatherDataError = WeatherObjectError(message: error.localizedDescription)
         }
     }
-    
-    func debugWeather() {
-        print(city)
-        
-        let status = manager.authorizationStatus
-
-        switch status {
-        case .restricted:
-            print("restricted")
-        case .denied:
-            print("denied")
-        case .notDetermined:
-            print("notDetermined")
-            manager.requestWhenInUseAuthorization()
-            manager.requestLocation()
-        case .authorizedAlways:
-            print("authorizedAlways")
-        case .authorizedWhenInUse:
-            print("authorizedWhenInUse")
-        @unknown default:
-            print("Unknown status")
-        }
-    }
 }
 
 @MainActor
