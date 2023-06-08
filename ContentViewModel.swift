@@ -40,6 +40,9 @@ class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     @MainActor
     func searchWeather() async {
+
+        // Normally I would not put my api key in the url like this but for the convenience of time I did.
+        // If given enough time, I would use a secrets manager https://medium.com/tumiya/secrets-management-for-ios-apps-8fbc38c479c7
         let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?q=\(self.city)&appid=4daab81f7e918e5c6eb2236e9225326a")
         
         do {

@@ -56,6 +56,7 @@ struct ContentView: View {
 //                    await viewModel.searchWeather()
 //                }
             
+            // This is to load the last city searched even when app is closed
             if let city = UserDefaults.standard.string(forKey: "City") {
                 viewModel.city = city
                 Task {
