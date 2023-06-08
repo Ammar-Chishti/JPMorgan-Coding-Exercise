@@ -86,7 +86,7 @@ struct WeatherDetailView: View {
             AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(weatherData.weather[0].icon)@2x.png")!)
             Text("Weather: \(weatherData.weather[0].main)")
             Text("Weather Description: \(weatherData.weather[0].description)")
-            Text("Temperature: \(weatherData.main.temp) Degrees Fahrenheit")
+            Text("Temperature: \(weatherData.main.temp) Kelvin")
             Text("Humidity: \(weatherData.main.humidity)")
         }
     }
