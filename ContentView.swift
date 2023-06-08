@@ -11,6 +11,8 @@ struct ContentView: View {
     
     @ObservedObject var viewModel: ContentViewModel = ContentViewModel()
     
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
     var body: some View {
         VStack {
             Button("Search Weather for City", action: {
@@ -26,18 +28,23 @@ struct ContentView: View {
             .textFieldStyle(.roundedBorder)
             
             NavigationView {
-                VStack {
-                    if let weatherData = viewModel.weatherData {
-                        Text("Weather for \(viewModel.city)")
-                        AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(weatherData.weather[0].icon)@2x.png")!)
-                        Text("Weather: \(weatherData.weather[0].main)")
-                        Text("Weather Description: \(weatherData.weather[0].description)")
-                        Text("Temperature: \(weatherData.main.temp) Degrees Fahrenheit")
-                        Text("Humidity: \(weatherData.main.humidity)").navigationTitle("Ammar Weather App")
-                    } else if let weatherDataError = viewModel.weatherDataError {
-                        Text(weatherDataError.message)
-                    }
-                }.navigationTitle("Ammar Weather App")
+                if (horizontalSizeClass == .compact) {
+                    VStack {
+                        if let weatherData = viewModel.weatherData {
+                            WeatherDetailView(weatherData: weatherData, city: viewModel.city).navigationTitle("Ammar Weather App")
+                        } else if let weatherDataError = viewModel.weatherDataError {
+                            Text(weatherDataError.message)
+                        }
+                    }.navigationTitle("Ammar Weather App")
+                } else {
+                    HStack {
+                        if let weatherData = viewModel.weatherData {
+                            WeatherDetailView(weatherData: weatherData, city: viewModel.city).navigationTitle("Ammar Weather App")
+                        } else if let weatherDataError = viewModel.weatherDataError {
+                            Text(weatherDataError.message)
+                        }
+                    }.navigationTitle("Ammar Weather App")
+                }
             }
         }
         .onAppear {
@@ -48,14 +55,14 @@ struct ContentView: View {
 //                Task {
 //                    await viewModel.searchWeather()
 //                }
-
+            
             if let city = UserDefaults.standard.string(forKey: "City") {
                 viewModel.city = city
                 Task {
                     await viewModel.searchWeather()
                 }
             }
-
+    
             print("Requesting location if not done already")
             viewModel.requestLocation()
         }
@@ -65,5 +72,21 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+struct WeatherDetailView: View {
+    let weatherData: WeatherObject
+    let city: String
+    
+    var body: some View {
+        VStack {
+            Text("Weather for \(city)")
+            AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(weatherData.weather[0].icon)@2x.png")!)
+            Text("Weather: \(weatherData.weather[0].main)")
+            Text("Weather Description: \(weatherData.weather[0].description)")
+            Text("Temperature: \(weatherData.main.temp) Degrees Fahrenheit")
+            Text("Humidity: \(weatherData.main.humidity)")
+        }
     }
 }

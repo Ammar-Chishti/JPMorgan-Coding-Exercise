@@ -46,8 +46,7 @@ class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
             let (data, _) = try await URLSession.shared.data(from: url!)
             let dataString = String(data: data, encoding: .utf8)!
             
-            print(dataString)
-            
+            // If given enough time, I would have all of these messages be placed into a constants file
             if (dataString.contains("Nothing to geocode")) {
                 self.weatherDataError = WeatherObjectError(message: "You cannot enter in a blank city. Try again")
                 self.weatherData = nil
@@ -64,31 +63,4 @@ class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
             self.weatherDataError = WeatherObjectError(message: error.localizedDescription)
         }
     }
-}
-
-@MainActor
-struct WeatherObject: Codable {
-    let coord: Coordinates
-    let main: mainInformation
-    let weather: [weatherInformation]
-}
-
-struct WeatherObjectError: Codable {
-    let message: String
-}
-
-struct Coordinates: Codable {
-    let lon: Double
-    let lat: Double
-}
-
-struct mainInformation: Codable {
-    let temp: Double
-    let humidity: Double
-}
-
-struct weatherInformation: Codable {
-    let main: String
-    let description: String
-    let icon: String
 }
